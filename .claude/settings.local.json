@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"c:/Repos/PlannerV2/public/\" && ls -la \"C:/Users/dexte/.claude/projects/c--Repos-PlannerV2/memory/\" 2>&1 | head -20)",
+      "Read(//c/Users/dexte/.claude/projects/c--Repos-PlannerV2/memory/**)",
+      "PowerShell(New-Item -ItemType Directory -Path \"C:\\\\Repos\\\\planner-v2-scaffold\" -Force | Out-Null; \\(Get-ChildItem \"C:\\\\Repos\\\\planner-v2-scaffold\"\\).Count)",
+      "PowerShell(Get-ChildItem \"C:\\\\Repos\\\\planner-v2-scaffold\\\\public\" | ForEach-Object { Move-Item $_.FullName \"C:\\\\Repos\\\\PlannerV2\\\\public\\\\$\\($_.Name\\)\" -Force }; Remove-Item \"C:\\\\Repos\\\\planner-v2-scaffold\\\\AGENTS.md\" -Force; Remove-Item \"C:\\\\Repos\\\\planner-v2-scaffold\" -Recurse -Force; Get-ChildItem \"C:\\\\Repos\\\\PlannerV2\" -Force | Format-Table Name, Mode -AutoSize)",
+      "PowerShell(npm install --no-audit --no-fund --loglevel=error 2>&1)",
+      "PowerShell(npm run verify:deps 2>&1)",
+      "PowerShell(npx drizzle-kit generate 2>&1)",
+      "PowerShell(npm install postgres@^3.4.5 --no-audit --no-fund --loglevel=error 2>&1)",
+      "PowerShell(npx tsc --noEmit 2>&1)",
+      "PowerShell(npx tsc --noEmit; if \\($?\\) { Write-Output \"TSC OK\" } else { Write-Output \"TSC FAILED $LASTEXITCODE\" })",
+      "PowerShell(npx --yes shadcn@latest init --help 2>&1)",
+      "PowerShell(npx --yes shadcn@latest init --defaults --silent 2>&1)",
+      "PowerShell(npx --yes shadcn@latest init --base=radix --silent --yes 2>&1)",
+      "PowerShell(npx --yes shadcn@latest add button input label --silent --yes 2>&1)",
+      "PowerShell(node -e \"console.log\\('clsx:', require\\('clsx'\\).clsx ? 'ok' : 'missing'\\); console.log\\('tailwind-merge:', require\\('tailwind-merge'\\).twMerge ? 'ok' : 'missing'\\); console.log\\('cva:', require\\('class-variance-authority'\\).cva ? 'ok' : 'missing'\\)\")",
+      "PowerShell(npm install clsx tailwind-merge class-variance-authority --no-audit --no-fund --loglevel=error 2>&1)",
+      "PowerShell(npm run lint 2>&1)",
+      "PowerShell(npm test 2>&1)"
+    ]
+  }
+}
