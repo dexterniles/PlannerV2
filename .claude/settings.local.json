@@ -18,7 +18,26 @@
       "PowerShell(node -e \"console.log\\('clsx:', require\\('clsx'\\).clsx ? 'ok' : 'missing'\\); console.log\\('tailwind-merge:', require\\('tailwind-merge'\\).twMerge ? 'ok' : 'missing'\\); console.log\\('cva:', require\\('class-variance-authority'\\).cva ? 'ok' : 'missing'\\)\")",
       "PowerShell(npm install clsx tailwind-merge class-variance-authority --no-audit --no-fund --loglevel=error 2>&1)",
       "PowerShell(npm run lint 2>&1)",
-      "PowerShell(npm test 2>&1)"
+      "PowerShell(npm test 2>&1)",
+      "PowerShell(node -e \"const p=require\\('./package.json'\\); console.log\\(JSON.stringify\\(p.scripts,null,2\\)\\); console.log\\('deps:', Object.keys\\(p.dependencies||{}\\).length, 'devDeps:', Object.keys\\(p.devDependencies||{}\\).length\\)\"; \"node_modules exists: \" + \\(Test-Path node_modules\\))",
+      "PowerShell($ErrorActionPreference='SilentlyContinue'; \"nvm:\"; Get-Command nvm; \"volta:\"; Test-Path \"$env:USERPROFILE\\\\.volta\\\\bin\\\\node.exe\"; \"fnm:\"; Get-Command fnm; \"winget node list:\"; winget list --id OpenJS.NodeJS 2>$null | Select-Object -Last 3; \"search C:\\\\ for node.exe \\(top 5\\):\"; Get-ChildItem -Path C:\\\\ -Filter node.exe -Recurse -ErrorAction SilentlyContinue -Depth 4 | Select-Object -First 5 FullName)",
+      "PowerShell(winget install --id OpenJS.NodeJS.LTS -e --silent --accept-source-agreements --accept-package-agreements)",
+      "PowerShell($deadline=\\(Get-Date\\).AddMinutes\\(4\\); while\\(\\(Get-Date\\) -lt $deadline\\){ $m=Get-Process msiexec -ErrorAction SilentlyContinue; if\\(-not $m\\){ \"msiexec idle\"; break }; Start-Sleep -Seconds 10 }; winget install --id OpenJS.NodeJS.LTS -e --silent --accept-source-agreements --accept-package-agreements)",
+      "PowerShell($nodeDir = \"$env:ProgramFiles\\\\nodejs\"; if\\(-not \\(Test-Path \"$nodeDir\\\\node.exe\"\\)\\){ $nodeDir = \\(Get-ChildItem 'C:\\\\Program Files\\\\nodejs','C:\\\\Program Files \\(x86\\)\\\\nodejs' -Filter node.exe -ErrorAction SilentlyContinue | Select-Object -First 1\\).DirectoryName }; \"nodeDir=$nodeDir\"; $env:Path = \"$nodeDir;$env:Path\"; node --version; npm --version)",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" install --no-audit --no-fund 2>&1 | Select-Object -Last 30)",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" --yes shadcn@latest add dialog popover dropdown-menu tabs tooltip command sheet separator avatar badge select textarea switch sonner scroll-area --yes --overwrite 2>&1 | Select-Object -Last 25)",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" --yes shadcn@latest add dialog popover dropdown-menu tabs tooltip command sheet separator avatar badge select textarea switch sonner scroll-area --yes --overwrite)",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" --yes shadcn@2.10.0 add dialog --yes --overwrite)",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" install tw-animate-css --no-audit --no-fund --save-dev 2>&1 | Select-String -Pattern \"added|error|npm ERR\" | Select-Object -First 5)",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" tsc --noEmit 2>&1; \"tsc exit: $LASTEXITCODE\")",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; \"=== eslint ===\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" eslint . 2>&1; \"eslint exit: $LASTEXITCODE\")",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" tsc --noEmit 2>&1; \"tsc exit: $LASTEXITCODE\"; \"=== eslint ===\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" eslint . 2>&1; \"eslint exit: $LASTEXITCODE\")",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" run build 2>&1 | Select-Object -Last 45)",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Users\\\\User\\\\AppData\\\\Roaming\\\\npm\\\\vercel.cmd\" --version 2>&1 | Out-String)",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; node \"C:\\\\Repos\\\\PlannerV2\\\\__mkbucket.mjs\"; Remove-Item \"C:\\\\Repos\\\\PlannerV2\\\\__mkbucket.mjs\" -Force)",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" eslint . 2>&1; \"eslint exit: $LASTEXITCODE\")",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" tsc --noEmit 2>&1; \"tsc: $LASTEXITCODE\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" eslint . 2>&1; \"eslint: $LASTEXITCODE\")",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" run build 2>&1 | Select-Object -Last 60)"
     ]
   }
 }
