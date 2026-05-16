@@ -1,6 +1,13 @@
+import { format } from "date-fns";
 import Link from "next/link";
 
+import { OverdueStrip } from "@/components/features/dashboard/OverdueStrip";
 import { formatAbsolute } from "@/lib/utils/dates";
+import type {
+  AgendaItem,
+  HeatmapCell,
+  OverdueItem,
+} from "@/lib/server/data/agenda";
 
 type Stats = Awaited<
   ReturnType<typeof import("@/lib/server/data/dashboard").getDashboardStats>
@@ -67,14 +74,96 @@ function Bar({ percent }: { percent: number }) {
   );
 }
 
+const KIND_DOT: Record<AgendaItem["kind"], string> = {
+  event: "var(--color-status-done)",
+  task: "var(--color-accent)",
+  assignment: "var(--color-status-in-progress)",
+  bill: "var(--color-status-blocked)",
+};
+
+function TodayTimeline({ items }: { items: AgendaItem[] }) {
+  return (
+    <Panel title="Today">
+      {items.length === 0 ? (
+        <p className="text-sm text-text-muted">Nothing scheduled today.</p>
+      ) : (
+        <ul className="flex flex-col">
+          {items.map((it) => (
+            <li key={`${it.kind}:${it.id}`}>
+              <Link
+                href={it.route}
+                className="flex items-center gap-3 rounded-md px-1 py-1.5 text-sm hover:bg-bg-hover"
+              >
+                <span className="w-16 shrink-0 text-xs text-text-subtle tabular-nums">
+                  {it.kind === "bill"
+                    ? "due"
+                    : format(new Date(it.at), "h:mm a")}
+                </span>
+                <span
+                  className="size-2 shrink-0 rounded-full"
+                  style={{ backgroundColor: KIND_DOT[it.kind] }}
+                />
+                <span className="flex-1 truncate text-text">{it.title}</span>
+                <span className="shrink-0 text-xs text-text-subtle capitalize">
+                  {it.kind}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Panel>
+  );
+}
+
+function Heatmap({ cells }: { cells: HeatmapCell[] }) {
+  const max = Math.max(1, ...cells.map((c) => c.count));
+  const shade = (count: number) => {
+    if (count === 0) return "var(--color-bg-hover)";
+    const t = 0.25 + 0.75 * (count / max);
+    return `color-mix(in oklab, var(--color-brand) ${Math.round(t * 100)}%, transparent)`;
+  };
+  return (
+    <Panel title="Workload · next 3 weeks">
+      <Link href="/calendar" className="flex flex-wrap gap-1">
+        {cells.map((c) => {
+          const d = new Date(`${c.date}T00:00:00.000Z`);
+          const weekend = [0, 6].includes(d.getUTCDay());
+          return (
+            <span
+              key={c.date}
+              title={`${format(d, "EEE MMM d")}: ${c.count} due`}
+              className="flex h-7 w-7 items-center justify-center rounded text-xs tabular-nums"
+              style={{
+                backgroundColor: shade(c.count),
+                color: weekend
+                  ? "var(--color-text-subtle)"
+                  : "var(--color-text-muted)",
+              }}
+            >
+              {d.getUTCDate()}
+            </span>
+          );
+        })}
+      </Link>
+    </Panel>
+  );
+}
+
 export function Dashboard({
   email,
   stats,
   grades,
+  agenda,
+  heatmap,
+  overdue,
 }: {
   email: string;
   stats: Stats;
   grades: Grades;
+  agenda: AgendaItem[];
+  heatmap: HeatmapCell[];
+  overdue: OverdueItem[];
 }) {
   const hour = new Date().getUTCHours();
   const greeting =
@@ -118,6 +207,13 @@ export function Dashboard({
           value={String(stats.eventsToday)}
           href="/events"
         />
+      </div>
+
+      {overdue.length > 0 ? <OverdueStrip initial={overdue} /> : null}
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <TodayTimeline items={agenda} />
+        <Heatmap cells={heatmap} />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">

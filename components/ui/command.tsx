@@ -50,7 +50,10 @@ function CommandDialog({
         showCloseButton={false}
         className={cn("overflow-hidden p-0", className)}
       >
-        <Command className="[&_[cmdk-group-heading]]:text-text-subtle [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:size-4 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-2.5 [&_[cmdk-item]_svg]:size-4">
+        <Command
+          shouldFilter={false}
+          className="[&_[cmdk-group-heading]]:text-text-subtle [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:size-4 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-2.5 [&_[cmdk-item]_svg]:size-4"
+        >
           {children}
         </Command>
       </DialogContent>

@@ -3,6 +3,7 @@
 import { PanelLeft, Search } from "lucide-react";
 import { usePathname } from "next/navigation";
 
+import { TimerChip } from "@/components/layout/TimerChip";
 import { Kbd } from "@/components/shared/Kbd";
 import { Button } from "@/components/ui/button";
 import { useKeymapActions } from "@/lib/keymap/use-keymap";
@@ -40,6 +41,7 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
         </span>
       </nav>
       <div className="flex-1" />
+      <TimerChip />
       <button
         type="button"
         onClick={openCommandPalette}

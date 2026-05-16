@@ -1,5 +1,6 @@
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
+import type { CreateKind } from "@/lib/create/kinds";
 import type { KeymapScope } from "@/lib/keymap/scopes";
 
 export type KeymapContext = {
@@ -8,6 +9,7 @@ export type KeymapContext = {
   openShortcutHelp: () => void;
   toggleTheme: () => void;
   closeDetail: () => void;
+  openCreate: (kind?: CreateKind) => void;
 };
 
 export type Shortcut = {
@@ -35,6 +37,14 @@ export const GLOBAL_SHORTCUTS: Shortcut[] = [
     scope: "global",
     group: "General",
     handler: (c) => c.openShortcutHelp(),
+  },
+  {
+    id: "create",
+    keys: "c",
+    description: "Create (context-aware)",
+    scope: "global",
+    group: "General",
+    handler: (c) => c.openCreate(),
   },
   {
     id: "toggle-theme",

@@ -7,16 +7,11 @@ import {
 } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+import { itemsKey, type ItemsFilters } from "@/lib/query/keys";
 import type { IssueItem, ItemKind } from "@/lib/validations/items";
 
-export type ItemsFilters = {
-  kinds?: ItemKind[];
-  projectId?: string;
-  courseId?: string;
-  status?: string;
-  priority?: string;
-  q?: string;
-};
+export type { ItemsFilters };
+export { itemsKey };
 
 function toSearchParams(filters: ItemsFilters): string {
   const p = new URLSearchParams();
@@ -36,9 +31,6 @@ async function fetchItems(filters: ItemsFilters): Promise<IssueItem[]> {
   const json = (await res.json()) as { data: IssueItem[] };
   return json.data;
 }
-
-export const itemsKey = (filters: ItemsFilters) =>
-  ["items", filters] as const;
 
 export function useItems(filters: ItemsFilters) {
   return useQuery({

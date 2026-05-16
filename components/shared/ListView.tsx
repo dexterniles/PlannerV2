@@ -25,12 +25,14 @@ export function ListView<T>({
   activeId,
   renderRow,
   onRowClick,
+  isSelected,
 }: {
   groups: ListGroup<T>[];
   getId: (item: T) => string;
   activeId: string | null;
   renderRow: (item: T, state: { active: boolean }) => ReactNode;
   onRowClick: (item: T) => void;
+  isSelected?: (item: T) => boolean;
 }) {
   const parentRef = useRef<HTMLDivElement>(null);
   const ROW_HEIGHT = rowHeight(useDensity());
@@ -75,17 +77,23 @@ export function ListView<T>({
   function ItemRow({ item }: { item: T }) {
     const id = getId(item);
     const active = id === activeId;
+    const selected = isSelected?.(item) ?? false;
     return (
       <div
         role="row"
         data-active={active}
+        data-selected={selected}
         onClick={() => onRowClick(item)}
         style={{ height: ROW_HEIGHT }}
         className={cn(
-          "flex cursor-default items-center gap-3 border-b border-border-subtle px-4 text-[13px] transition-colors duration-[60ms] hover:bg-bg-hover max-sm:text-xs",
+          "relative flex cursor-default items-center gap-3 border-b border-border-subtle px-4 text-[13px] transition-colors duration-[60ms] hover:bg-bg-hover max-sm:text-xs",
           active && "bg-bg-hover",
+          selected && "bg-brand/10",
         )}
       >
+        {selected ? (
+          <span className="absolute left-0 top-0 h-full w-0.5 bg-brand" />
+        ) : null}
         {renderRow(item, { active })}
       </div>
     );

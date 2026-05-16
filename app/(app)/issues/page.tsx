@@ -4,7 +4,7 @@ import { IssuesView } from "@/components/features/issues/IssuesView";
 import { getQueryClient } from "@/lib/query/client";
 import { getServerAuth } from "@/lib/server/auth";
 import { getItems } from "@/lib/server/data/items";
-import { itemsKey } from "@/lib/hooks/use-items";
+import { itemsKey } from "@/lib/query/keys";
 
 export const metadata = { title: "Issues" };
 

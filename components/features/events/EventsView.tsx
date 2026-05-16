@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 
 import { ListView, type ListGroup } from "@/components/shared/ListView";
 import { StatusPill } from "@/components/shared/StatusPill";
+import { ViewHeader } from "@/components/shared/ViewHeader";
 import { useCollection } from "@/lib/hooks/use-collection";
 import { formatAbsolute } from "@/lib/utils/dates";
 
@@ -41,43 +42,43 @@ export function EventsView() {
     return out;
   }, [events, now]);
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-1 items-center justify-center text-sm text-text-muted">
-        Loading…
-      </div>
-    );
-  }
-  if (events.length === 0) {
-    return (
-      <div className="flex flex-1 items-center justify-center text-sm text-text-muted">
-        No events.
-      </div>
-    );
-  }
-
   return (
-    <ListView
-      groups={groups}
-      getId={(e) => e.id}
-      activeId={null}
-      onRowClick={(e) => router.push(`/events?detail=event:${e.id}`)}
-      renderRow={(e) => (
-        <>
-          <span className="w-40 shrink-0 text-xs text-text-muted tabular-nums">
-            {formatAbsolute(e.startsAt)}
-          </span>
-          <span className="flex-1 truncate text-sm text-text">{e.title}</span>
-          {e.location ? (
-            <span className="shrink-0 text-xs text-text-subtle">
-              {e.location}
-            </span>
-          ) : null}
-          <span className="w-24 shrink-0">
-            <StatusPill status={e.status} />
-          </span>
-        </>
+    <div className="flex flex-1 flex-col">
+      <ViewHeader title="Events" createKind="event" />
+      {isLoading ? (
+        <div className="flex flex-1 items-center justify-center text-sm text-text-muted">
+          Loading…
+        </div>
+      ) : events.length === 0 ? (
+        <div className="flex flex-1 items-center justify-center text-sm text-text-muted">
+          No events yet.
+        </div>
+      ) : (
+        <ListView
+          groups={groups}
+          getId={(e) => e.id}
+          activeId={null}
+          onRowClick={(e) => router.push(`/events?detail=event:${e.id}`)}
+          renderRow={(e) => (
+            <>
+              <span className="w-40 shrink-0 text-xs text-text-muted tabular-nums">
+                {formatAbsolute(e.startsAt)}
+              </span>
+              <span className="flex-1 truncate text-sm text-text">
+                {e.title}
+              </span>
+              {e.location ? (
+                <span className="shrink-0 text-xs text-text-subtle">
+                  {e.location}
+                </span>
+              ) : null}
+              <span className="w-24 shrink-0">
+                <StatusPill status={e.status} />
+              </span>
+            </>
+          )}
+        />
       )}
-    />
+    </div>
   );
 }

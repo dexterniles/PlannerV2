@@ -5,10 +5,12 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { Timer } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { DueDate } from "@/components/shared/DueDate";
+import { useStartTimer } from "@/lib/hooks/use-timer";
 import {
   Select,
   SelectContent,
@@ -47,6 +49,7 @@ async function fetchRecord(
 
 export function IssueDetail({ kind, id }: { kind: ItemKind; id: string }) {
   const qc = useQueryClient();
+  const startTimer = useStartTimer();
   const key = ["issue", kind, id] as const;
 
   const { data, isLoading } = useQuery({
@@ -150,6 +153,17 @@ export function IssueDetail({ kind, id }: { kind: ItemKind; id: string }) {
             <span className="text-xs text-text-subtle">—</span>
           )}
         </div>
+
+        <button
+          type="button"
+          onClick={() =>
+            startTimer.mutate({ loggableType: kind, loggableId: id })
+          }
+          className="mt-1 flex h-7 items-center justify-center gap-1.5 rounded-md border border-border-subtle text-xs text-text-muted hover:bg-bg-hover"
+        >
+          <Timer className="size-3.5" />
+          Start timer
+        </button>
       </div>
     </div>
   );

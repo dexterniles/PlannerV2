@@ -7,6 +7,7 @@ import { DueDate } from "@/components/shared/DueDate";
 import { ListView, type ListGroup } from "@/components/shared/ListView";
 import { PriorityChip, type Priority } from "@/components/shared/PriorityChip";
 import { StatusPill } from "@/components/shared/StatusPill";
+import { ViewHeader } from "@/components/shared/ViewHeader";
 import { useCollection } from "@/lib/hooks/use-collection";
 
 export type Project = {
@@ -49,39 +50,39 @@ export function ProjectsView() {
   const [activeIndex] = useState(0);
   const activeId = flat[activeIndex]?.id ?? null;
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-1 items-center justify-center text-sm text-text-muted">
-        Loading…
-      </div>
-    );
-  }
-  if (flat.length === 0) {
-    return (
-      <div className="flex flex-1 items-center justify-center text-sm text-text-muted">
-        No projects.
-      </div>
-    );
-  }
-
   return (
-    <ListView
-      groups={groups}
-      getId={(p) => p.id}
-      activeId={activeId}
-      onRowClick={(p) => router.push(`/projects?detail=project:${p.id}`)}
-      renderRow={(p) => (
-        <>
-          <PriorityChip priority={p.priority} />
-          <span className="w-24 shrink-0">
-            <StatusPill status={p.status} />
-          </span>
-          <span className="flex-1 truncate text-sm text-text">{p.name}</span>
-          <span className="w-16 shrink-0 text-right">
-            <DueDate value={p.targetDate} />
-          </span>
-        </>
+    <div className="flex flex-1 flex-col">
+      <ViewHeader title="Projects" createKind="project" />
+      {isLoading ? (
+        <div className="flex flex-1 items-center justify-center text-sm text-text-muted">
+          Loading…
+        </div>
+      ) : flat.length === 0 ? (
+        <div className="flex flex-1 items-center justify-center text-sm text-text-muted">
+          No projects yet.
+        </div>
+      ) : (
+        <ListView
+          groups={groups}
+          getId={(p) => p.id}
+          activeId={activeId}
+          onRowClick={(p) => router.push(`/projects?detail=project:${p.id}`)}
+          renderRow={(p) => (
+            <>
+              <PriorityChip priority={p.priority} />
+              <span className="w-24 shrink-0">
+                <StatusPill status={p.status} />
+              </span>
+              <span className="flex-1 truncate text-sm text-text">
+                {p.name}
+              </span>
+              <span className="w-16 shrink-0 text-right">
+                <DueDate value={p.targetDate} />
+              </span>
+            </>
+          )}
+        />
       )}
-    />
+    </div>
   );
 }

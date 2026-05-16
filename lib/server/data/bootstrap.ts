@@ -12,9 +12,15 @@ export async function bootstrapNewUser(userId: string): Promise<void> {
 
   if (existing.length > 0) return;
 
-  await db.insert(workspaces).values([
-    { userId, name: "Personal", type: "custom", sortOrder: 0 },
-    { userId, name: "Academic", type: "academic", sortOrder: 1 },
-    { userId, name: "Projects", type: "projects", sortOrder: 2 },
-  ]);
+  // The pre-check narrows the common case; onConflictDoNothing makes this
+  // safe when concurrent first-load requests race past it (the dev double
+  // GET, prefetch, or a fast double nav all trigger this).
+  await db
+    .insert(workspaces)
+    .values([
+      { userId, name: "Personal", type: "custom", sortOrder: 0 },
+      { userId, name: "Academic", type: "academic", sortOrder: 1 },
+      { userId, name: "Projects", type: "projects", sortOrder: 2 },
+    ])
+    .onConflictDoNothing();
 }

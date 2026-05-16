@@ -5,6 +5,7 @@ import { useMemo } from "react";
 
 import { ListView, type ListGroup } from "@/components/shared/ListView";
 import { StatusPill } from "@/components/shared/StatusPill";
+import { ViewHeader } from "@/components/shared/ViewHeader";
 import { useCollection } from "@/lib/hooks/use-collection";
 
 type Course = {
@@ -42,50 +43,48 @@ export function CoursesView() {
     }));
   }, [courses]);
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-1 items-center justify-center text-sm text-text-muted">
-        Loading…
-      </div>
-    );
-  }
-  if (courses.length === 0) {
-    return (
-      <div className="flex flex-1 items-center justify-center text-sm text-text-muted">
-        No courses.
-      </div>
-    );
-  }
-
   return (
-    <ListView
-      groups={groups}
-      getId={(c) => c.id}
-      activeId={null}
-      onRowClick={(c) => router.push(`/courses?detail=course:${c.id}`)}
-      renderRow={(c) => (
-        <>
-          <span className="w-24 shrink-0">
-            <StatusPill status={c.status} />
-          </span>
-          <span className="flex-1 truncate text-sm text-text">
-            {c.code ? (
-              <span className="text-text-subtle">{c.code} · </span>
-            ) : null}
-            {c.name}
-          </span>
-          {c.semester ? (
-            <span className="shrink-0 text-xs text-text-subtle">
-              {c.semester}
-            </span>
-          ) : null}
-          {c.credits ? (
-            <span className="w-12 shrink-0 text-right text-xs text-text-muted tabular-nums">
-              {c.credits} cr
-            </span>
-          ) : null}
-        </>
+    <div className="flex flex-1 flex-col">
+      <ViewHeader title="Courses" createKind="course" />
+      {isLoading ? (
+        <div className="flex flex-1 items-center justify-center text-sm text-text-muted">
+          Loading…
+        </div>
+      ) : courses.length === 0 ? (
+        <div className="flex flex-1 items-center justify-center text-sm text-text-muted">
+          No courses yet.
+        </div>
+      ) : (
+        <ListView
+          groups={groups}
+          getId={(c) => c.id}
+          activeId={null}
+          onRowClick={(c) => router.push(`/courses?detail=course:${c.id}`)}
+          renderRow={(c) => (
+            <>
+              <span className="w-24 shrink-0">
+                <StatusPill status={c.status} />
+              </span>
+              <span className="flex-1 truncate text-sm text-text">
+                {c.code ? (
+                  <span className="text-text-subtle">{c.code} · </span>
+                ) : null}
+                {c.name}
+              </span>
+              {c.semester ? (
+                <span className="shrink-0 text-xs text-text-subtle">
+                  {c.semester}
+                </span>
+              ) : null}
+              {c.credits ? (
+                <span className="w-12 shrink-0 text-right text-xs text-text-muted tabular-nums">
+                  {c.credits} cr
+                </span>
+              ) : null}
+            </>
+          )}
+        />
       )}
-    />
+    </div>
   );
 }

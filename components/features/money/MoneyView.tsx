@@ -1,9 +1,13 @@
 "use client";
 
+import { Plus } from "lucide-react";
+
 import { StatusPill } from "@/components/shared/StatusPill";
 import { DueDate } from "@/components/shared/DueDate";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCollection } from "@/lib/hooks/use-collection";
+import { useKeymapActions } from "@/lib/keymap/use-keymap";
 import { formatAbsolute } from "@/lib/utils/dates";
 
 type Bill = {
@@ -105,13 +109,24 @@ function IncomeTab() {
 }
 
 export function MoneyView() {
+  const { openCreate } = useKeymapActions();
   return (
     <Tabs defaultValue="out" className="flex flex-1 flex-col gap-0">
-      <div className="border-b border-border-subtle px-4 py-2">
+      <div className="flex items-center justify-between border-b border-border-subtle px-4 py-2">
         <TabsList>
           <TabsTrigger value="out">Out</TabsTrigger>
           <TabsTrigger value="in">In</TabsTrigger>
         </TabsList>
+        <div className="flex gap-2">
+          <Button size="xs" variant="outline" onClick={() => openCreate("bill")}>
+            <Plus className="size-3" />
+            Bill
+          </Button>
+          <Button size="xs" variant="outline" onClick={() => openCreate("income")}>
+            <Plus className="size-3" />
+            Income
+          </Button>
+        </div>
       </div>
       <TabsContent value="out">
         <BillsTab />
