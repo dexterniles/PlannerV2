@@ -37,7 +37,8 @@
       "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; node \"C:\\\\Repos\\\\PlannerV2\\\\__mkbucket.mjs\"; Remove-Item \"C:\\\\Repos\\\\PlannerV2\\\\__mkbucket.mjs\" -Force)",
       "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" eslint . 2>&1; \"eslint exit: $LASTEXITCODE\")",
       "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" tsc --noEmit 2>&1; \"tsc: $LASTEXITCODE\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" eslint . 2>&1; \"eslint: $LASTEXITCODE\")",
-      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" run build 2>&1 | Select-Object -Last 60)"
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" run build 2>&1 | Select-Object -Last 60)",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" run build 2>&1 | Select-String -Pattern \"Compiled successfully|Failed|Error|error|✓|✗\" | Select-Object -First 20; \"build exit: $LASTEXITCODE\")"
     ]
   }
 }

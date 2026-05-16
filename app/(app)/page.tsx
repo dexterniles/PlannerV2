@@ -1,13 +1,16 @@
-import { LayoutDashboard } from "lucide-react";
+import { Dashboard } from "@/components/features/dashboard/Dashboard";
+import { getServerAuth } from "@/lib/server/auth";
+import {
+  getDashboardGrades,
+  getDashboardStats,
+} from "@/lib/server/data/dashboard";
 
-import { EmptyState } from "@/components/shared/EmptyState";
+export default async function DashboardPage() {
+  const auth = await getServerAuth();
+  const [stats, grades] = await Promise.all([
+    getDashboardStats(auth.userId),
+    getDashboardGrades(auth.userId),
+  ]);
 
-export default function DashboardPage() {
-  return (
-    <EmptyState
-      icon={LayoutDashboard}
-      headline="Dashboard"
-      body="Your day at a glance. This view is built in a later phase."
-    />
-  );
+  return <Dashboard email={auth.email} stats={stats} grades={grades} />;
 }

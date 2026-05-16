@@ -1,15 +1,9 @@
-import { Settings } from "lucide-react";
-
-import { EmptyState } from "@/components/shared/EmptyState";
+import { SettingsView } from "@/components/features/settings/SettingsView";
+import { getServerAuth } from "@/lib/server/auth";
 
 export const metadata = { title: "Settings" };
 
-export default function SettingsPage() {
-  return (
-    <EmptyState
-      icon={Settings}
-      headline="Settings"
-      body="Profile, appearance, workspaces, and data export."
-    />
-  );
+export default async function SettingsPage() {
+  const auth = await getServerAuth();
+  return <SettingsView email={auth.email} />;
 }
