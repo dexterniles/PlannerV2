@@ -3,6 +3,7 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useRef, type ReactNode } from "react";
 
+import { rowHeight, useDensity } from "@/components/layout/DensityContext";
 import { cn } from "@/lib/utils";
 
 export type ListGroup<T> = {
@@ -16,7 +17,6 @@ type Row<T> =
   | { type: "item"; key: string; item: T };
 
 const VIRTUALIZE_THRESHOLD = 200;
-const ROW_HEIGHT = 36;
 const HEADER_HEIGHT = 32;
 
 export function ListView<T>({
@@ -33,6 +33,7 @@ export function ListView<T>({
   onRowClick: (item: T) => void;
 }) {
   const parentRef = useRef<HTMLDivElement>(null);
+  const ROW_HEIGHT = rowHeight(useDensity());
 
   const rows: Row<T>[] = [];
   for (const g of groups) {
@@ -79,8 +80,9 @@ export function ListView<T>({
         role="row"
         data-active={active}
         onClick={() => onRowClick(item)}
+        style={{ height: ROW_HEIGHT }}
         className={cn(
-          "flex h-9 cursor-default items-center gap-3 border-b border-border-subtle px-4 transition-colors duration-[60ms] hover:bg-bg-hover",
+          "flex cursor-default items-center gap-3 border-b border-border-subtle px-4 text-[13px] transition-colors duration-[60ms] hover:bg-bg-hover max-sm:text-xs",
           active && "bg-bg-hover",
         )}
       >

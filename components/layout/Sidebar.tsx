@@ -28,15 +28,18 @@ function NavRow({
   item,
   collapsed,
   active,
+  onNavigate,
 }: {
   item: NavItem;
   collapsed: boolean;
   active: boolean;
+  onNavigate?: () => void;
 }) {
   const Icon = item.icon;
   return (
     <Link
       href={item.href}
+      onClick={onNavigate}
       title={collapsed ? item.label : undefined}
       className={cn(
         "relative flex h-7 items-center gap-2 rounded-md px-2 text-sm text-text-muted transition-colors hover:bg-bg-hover hover:text-text",
@@ -57,10 +60,12 @@ export function Sidebar({
   collapsed,
   workspaces,
   email,
+  onNavigate,
 }: {
   collapsed: boolean;
   workspaces: WorkspaceSummary[];
   email: string;
+  onNavigate?: () => void;
 }) {
   const pathname = usePathname();
   const initials = email.slice(0, 2).toUpperCase() || "PL";
@@ -109,13 +114,17 @@ export function Sidebar({
         </div>
       )}
 
-      <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-2">
+      <nav
+        aria-label="Primary"
+        className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-2"
+      >
         {PRIMARY_NAV.map((item) => (
           <NavRow
             key={item.href}
             item={item}
             collapsed={collapsed}
             active={isActive(pathname, item.href)}
+            onNavigate={onNavigate}
           />
         ))}
         <div className="my-2 h-px bg-border-subtle" />
@@ -125,6 +134,7 @@ export function Sidebar({
             item={item}
             collapsed={collapsed}
             active={isActive(pathname, item.href)}
+            onNavigate={onNavigate}
           />
         ))}
       </nav>
@@ -136,7 +146,10 @@ export function Sidebar({
         )}
       >
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center gap-2 rounded-md outline-none">
+          <DropdownMenuTrigger
+            aria-label="Account menu"
+            className="flex items-center gap-2 rounded-md outline-none"
+          >
             <Avatar>
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>

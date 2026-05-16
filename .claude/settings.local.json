@@ -38,7 +38,11 @@
       "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" eslint . 2>&1; \"eslint exit: $LASTEXITCODE\")",
       "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" tsc --noEmit 2>&1; \"tsc: $LASTEXITCODE\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" eslint . 2>&1; \"eslint: $LASTEXITCODE\")",
       "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" run build 2>&1 | Select-Object -Last 60)",
-      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" run build 2>&1 | Select-String -Pattern \"Compiled successfully|Failed|Error|error|✓|✗\" | Select-Object -First 20; \"build exit: $LASTEXITCODE\")"
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" run build 2>&1 | Select-String -Pattern \"Compiled successfully|Failed|Error|error|✓|✗\" | Select-Object -First 20; \"build exit: $LASTEXITCODE\")",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" test 2>&1 | Select-Object -Last 22)",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" run build 2>&1 | Select-String -Pattern \"Compiled successfully|Failed|error|cron|✓ Generating\" | Select-Object -First 12; \"build: $LASTEXITCODE\")",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" tsc --noEmit 2>&1; \"tsc: $LASTEXITCODE\"; & \"C:\\\\Program Files\\\\nodejs\\\\npx.cmd\" eslint . 2>&1; \"eslint: $LASTEXITCODE\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" test 2>&1 | Select-String -Pattern \"tests |pass |fail \"; \"test: $LASTEXITCODE\")",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;$env:Path\"; & \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" run build 2>&1 | Select-String -Pattern \"Compiled successfully|Failed|error|✓ Generating\" | Select-Object -First 8; \"build: $LASTEXITCODE\")"
     ]
   }
 }

@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 
 import {
   computeOccurrences,
+  planRecurrence,
   type RecurrenceRule,
 } from "./recurrence";
 
@@ -212,5 +213,55 @@ describe("computeOccurrences", () => {
       "2024-01-08T10:00:00.000Z",
       "2024-01-15T10:00:00.000Z",
     ]);
+  });
+});
+
+describe("planRecurrence (materializer planning core)", () => {
+  it("uses the earliest row as the anchor regardless of input order", () => {
+    const rule = baseRule({ frequency: "weekly", interval: 1 });
+    const rows = [
+      { date: utc(2024, 1, 15, 9) },
+      { date: utc(2024, 1, 1, 9) },
+      { date: utc(2024, 1, 8, 9) },
+    ];
+    const got = planRecurrence(rows, rule, utc(2024, 1, 1, 9), 14);
+    // Anchor = Jan 1 09:00; the three listed dates already exist, so only
+    // the new Jan 22 occurrence inside the 14-day window remains.
+    assert.deepEqual(got.map(toIso), []);
+  });
+
+  it("only returns occurrences not already covered by existing rows", () => {
+    const rule = baseRule({ frequency: "weekly", interval: 1 });
+    const rows = [{ date: utc(2024, 1, 1, 9) }];
+    const got = planRecurrence(rows, rule, utc(2024, 1, 1, 9), 14);
+    assert.deepEqual(got.map(toIso), [
+      "2024-01-08T09:00:00.000Z",
+      "2024-01-15T09:00:00.000Z",
+    ]);
+  });
+
+  it("is idempotent: feeding the prior result back yields nothing new", () => {
+    const rule = baseRule({ frequency: "weekly", interval: 1 });
+    const start = utc(2024, 1, 1, 9);
+    const first = planRecurrence([{ date: start }], rule, start, 14);
+    const rows = [{ date: start }, ...first.map((date) => ({ date }))];
+    const second = planRecurrence(rows, rule, start, 14);
+    assert.deepEqual(second, []);
+  });
+
+  it("honors the lifetime count cap across already-materialized rows", () => {
+    const rule = baseRule({ frequency: "weekly", interval: 1, count: 3 });
+    const start = utc(2024, 1, 1, 9);
+    const rows = [
+      { date: start },
+      { date: utc(2024, 1, 8, 9) },
+      { date: utc(2024, 1, 15, 9) },
+    ];
+    const got = planRecurrence(rows, rule, start, 60);
+    assert.deepEqual(got, []);
+  });
+
+  it("returns nothing for an empty row set", () => {
+    assert.deepEqual(planRecurrence([], baseRule(), utc(2024, 1, 1), 14), []);
   });
 });

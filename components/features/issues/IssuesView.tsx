@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { DueDate } from "@/components/shared/DueDate";
@@ -66,6 +66,8 @@ const KIND_TABS: { label: string; value: ItemKind | "all" }[] = [
 
 export function IssuesView() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const detailOpen = searchParams.has("detail");
   const [kindTab, setKindTab] = useState<ItemKind | "all">("all");
   const [q, setQ] = useState("");
 
@@ -165,6 +167,20 @@ export function IssuesView() {
           e.preventDefault();
           filterRef.current?.focus();
           return;
+        case "]": {
+          e.preventDefault();
+          const next = Math.min(clampedIndex + 1, flat.length - 1);
+          setActiveIndex(next);
+          if (detailOpen && flat[next]) openDetail(flat[next]);
+          return;
+        }
+        case "[": {
+          e.preventDefault();
+          const prev = Math.max(clampedIndex - 1, 0);
+          setActiveIndex(prev);
+          if (detailOpen && flat[prev]) openDetail(flat[prev]);
+          return;
+        }
       }
 
       if (current && current.kind === "task" && PRIORITY_BY_DIGIT[e.key]) {
@@ -179,7 +195,7 @@ export function IssuesView() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [flat, clampedIndex, mutation, openDetail]);
+  }, [flat, clampedIndex, mutation, openDetail, detailOpen]);
 
   return (
     <div className="flex flex-1 flex-col">

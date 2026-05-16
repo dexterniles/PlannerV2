@@ -123,19 +123,27 @@ function utcDateBucket(d: Date): number {
   return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
 }
 
-// ---------------------------------------------------------------------------
-// Materializer (DB-backed) — wired up in Phase 11 (cron handler).
-// The cron handler in /api/cron/auto-complete imports this and feeds it the
-// userId for each user. It reads parent rows with non-null recurrence_rule_id,
-// passes (anchor, rule, now, existingDates) to computeOccurrences, and inserts
-// the returned occurrences as new child rows on the same parent table.
-// ---------------------------------------------------------------------------
+export type RecurringRow = { date: Date };
 
-export async function materializeRecurrencesForUser(
-  _userId: string,
-  _now: Date = new Date(),
-): Promise<{ inserted: number }> {
-  void _userId;
-  void _now;
-  throw new Error("materializeRecurrencesForUser is wired up in Phase 11");
+// Pure planning core for the materializer (kept DB-free so it is unit
+// testable). Given every existing row that already references a rule, the
+// earliest is the recurrence anchor and all of them are "existing" dates;
+// returns the occurrence dates within the window that have no row yet.
+export function planRecurrence(
+  rows: RecurringRow[],
+  rule: RecurrenceRule,
+  now: Date,
+  windowDays = 14,
+): Date[] {
+  if (rows.length === 0) return [];
+  const sorted = [...rows].sort(
+    (a, b) => a.date.getTime() - b.date.getTime(),
+  );
+  return computeOccurrences({
+    anchor: sorted[0].date,
+    rule,
+    now,
+    windowDays,
+    existingDates: sorted.map((r) => r.date),
+  });
 }
